@@ -1,0 +1,122 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.8.0/schema.json",
+  "name": "v14485c1fa82105bb66",
+  "position": {
+    "x": 840,
+    "y": 417,
+    "z": 13000,
+    "height": 293,
+    "width": 420,
+    "tabOrder": 13000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "СПР_Менеджеры"
+                    }
+                  },
+                  "Property": "Менеджер"
+                }
+              },
+              "queryRef": "СПР_Менеджеры.Менеджер",
+              "nativeQueryRef": "Менеджер"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Меры"
+                    }
+                  },
+                  "Property": "Прибыль убыточных заказов"
+                }
+              },
+              "queryRef": "_Меры.Прибыль убыточных заказов",
+              "nativeQueryRef": "Прибыль убыточных заказов",
+              "displayName": "Прибыль (минус)"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Меры"
+                    }
+                  },
+                  "Property": "Убыточных заказов"
+                }
+              },
+              "queryRef": "_Меры.Убыточных заказов",
+              "nativeQueryRef": "Убыточных заказов",
+              "displayName": "Заказов"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "_Меры"
+                  }
+                },
+                "Property": "Прибыль убыточных заказов"
+              }
+            },
+            "direction": "Ascending"
+          }
+        ],
+        "isDefaultSort": false
+      }
+    },
+    "drillFilterOtherVisuals": true,
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'заказы с минусовой прибылью'"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

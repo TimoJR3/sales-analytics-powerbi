@@ -1,0 +1,114 @@
+table 'Продажи'
+	lineageTag: e68b00b5-129a-4ef3-9666-f065c94124ad
+
+	column 'Order_ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: 14af9261-8717-445b-915c-f65d8590a5d2
+		summarizeBy: none
+		sourceColumn: Order_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Приоритет'
+		dataType: string
+		lineageTag: 0e7c802f-2c46-4cc8-96d8-d8dad2fcde67
+		summarizeBy: none
+		sourceColumn: Приоритет
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Количество'
+		dataType: int64
+		formatString: 0
+		lineageTag: a1d4c466-f60c-47cd-bd5e-f87fab9f4add
+		summarizeBy: sum
+		sourceColumn: Количество
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Выручка'
+		dataType: double
+		formatString: #,0.00
+		lineageTag: 98166d1b-c0d0-44f8-a882-e962b555ad05
+		summarizeBy: sum
+		sourceColumn: Выручка
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Метод доставки'
+		dataType: string
+		lineageTag: 1c1ab4f5-91a4-4314-b940-62fc5f4cac24
+		summarizeBy: none
+		sourceColumn: Метод доставки
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Прибыль'
+		dataType: double
+		formatString: #,0.00
+		lineageTag: f4ce683e-ea02-4f73-a6df-2af31bc985ee
+		summarizeBy: sum
+		sourceColumn: Прибыль
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Покупатель'
+		dataType: string
+		lineageTag: 6ab59236-1e18-43f7-a883-5178161a409c
+		summarizeBy: none
+		sourceColumn: Покупатель
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Регион'
+		dataType: string
+		lineageTag: 179f9620-11ac-44ee-8cca-2f1be5defa37
+		summarizeBy: none
+		sourceColumn: Регион
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Продукт'
+		dataType: string
+		lineageTag: 8225735a-5253-40f5-8b14-9ad8d7b88c44
+		summarizeBy: none
+		sourceColumn: Продукт
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Упаковка продукта'
+		dataType: string
+		lineageTag: ca780c59-dacb-42b2-a5e5-fc259200902b
+		summarizeBy: none
+		sourceColumn: Упаковка продукта
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Дата заказа'
+		dataType: dateTime
+		formatString: dd.MM.yyyy
+		lineageTag: 16b6b9c9-8407-44d6-b39c-e97254fa3516
+		summarizeBy: none
+		sourceColumn: Дата заказа
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Продажи' = m
+		mode: import
+		source =
+				let
+				    ЧислоИз = (x) => if x = null then null else if Value.Is(x, type number) then x else Number.From(Text.Remove(Text.From(x), {" ", "#(00A0)", "#(202F)"}), "en-US"),
+				    ТекстИз = (x) => if x = null then null else Text.Trim(Text.From(x)),
+				    Лист = #"Источник_Excel"{[Item="Продажи",Kind="Sheet"]}[Data],
+				    Выбор = Table.SelectColumns(Лист, {"Order_ID", "Приоритет", "Количество", "Выручка", "Метод доставки", "Прибыль", "Покупатель", "Регион", "Продукт", "Упаковка продукта"}),
+				    Числа = Table.TransformColumns(Выбор, {{"Order_ID", each Int64.From(ЧислоИз(_)), Int64.Type}, {"Количество", each Int64.From(ЧислоИз(_)), Int64.Type}, {"Выручка", ЧислоИз, type number}, {"Прибыль", ЧислоИз, type number}}),
+				    Текст = Table.TransformColumns(Числа, {{"Приоритет", ТекстИз, type text}, {"Метод доставки", ТекстИз, type text}, {"Покупатель", ТекстИз, type text}, {"Регион", ТекстИз, type text}, {"Продукт", ТекстИз, type text}, {"Упаковка продукта", ТекстИз, type text}}),
+				    Пустые = Table.SelectRows(Текст, each [Order_ID] <> null and [Выручка] <> null),
+				    СДатой = Table.NestedJoin(Пустые, {"Order_ID"}, #"СПР_даты", {"Order_ID"}, "Д", JoinKind.LeftOuter),
+				    Развернуть = Table.ExpandTableColumn(СДатой, "Д", {"Дата"}, {"Дата заказа"}),
+				    Итог = Table.TransformColumnTypes(Развернуть, {{"Дата заказа", type date}})
+				in
+				    Итог
+
+	annotation PBI_ResultType = Table

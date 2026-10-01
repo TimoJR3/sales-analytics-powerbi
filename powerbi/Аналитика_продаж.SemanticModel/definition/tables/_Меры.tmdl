@@ -1,0 +1,57 @@
+table '_Меры'
+	lineageTag: 7e9433e1-5c73-4789-87d6-f22a5fdfbebb
+
+	measure 'Выручка' = SUM('Продажи'[Выручка])
+		formatString: #,0.00
+		lineageTag: fedb197d-814c-46a5-905f-b6c8b00db2d8
+
+	measure 'Прибыль' = SUM('Продажи'[Прибыль])
+		formatString: #,0.00
+		lineageTag: bc676928-016e-4058-8cf1-558cc2dcf778
+
+	measure 'Рентабельность, %' = DIVIDE([Прибыль], [Выручка])
+		formatString: 0.00%
+		lineageTag: 979a40b7-abe6-4d0c-96a4-c6a37f4efd2f
+
+	measure 'АКБ' = DISTINCTCOUNT('Продажи'[Покупатель])
+		formatString: #,0
+		lineageTag: 3c33a05b-b761-4908-8ede-29ad43e0c7a8
+
+	measure 'Кол-во заказов' = DISTINCTCOUNT('Продажи'[Order_ID])
+		formatString: #,0
+		lineageTag: 8bdbf61c-69e5-41c2-9322-64532de09a3c
+
+	measure 'Средний чек' = DIVIDE([Выручка], [Кол-во заказов])
+		formatString: #,0.00
+		lineageTag: fde62538-a3c2-4d3f-a369-eb48094f07d5
+
+	measure 'Затраты на логистику' = SUMX('Продажи', RELATED('СПР_стоимость_доставки'[Стоимость доставки]))
+		formatString: #,0
+		lineageTag: 859cebdb-e414-4ef9-8abe-934e8ae82844
+
+	measure 'Доля логистики, %' = DIVIDE([Затраты на логистику], [Выручка])
+		formatString: 0.00%
+		lineageTag: 729283bd-09dc-4141-81d1-49571cc77fe5
+
+	measure 'Прибыль убыточных заказов' = SUMX(SUMMARIZE('Продажи', 'СПР_Менеджеры'[Менеджер], 'Продажи'[Order_ID]), VAR p = CALCULATE(SUM('Продажи'[Прибыль])) RETURN IF(p < 0, p))
+		formatString: #,0.00
+		lineageTag: 4686e3d5-f81c-4e53-a0c5-fb1e25f054c2
+
+	measure 'Убыточных заказов' = COUNTROWS(FILTER(SUMMARIZE('Продажи', 'СПР_Менеджеры'[Менеджер], 'Продажи'[Order_ID]), CALCULATE(SUM('Продажи'[Прибыль])) < 0))
+		formatString: #,0
+		lineageTag: e8fc5a26-a15f-4f10-9237-a0944d1d588a
+
+	column 'Служебный'
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: ab2a1864-9183-4dcc-b2ed-4bd8eb66b280
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Служебный]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition '_Меры' = calculated
+		mode: import
+		source = ROW("Служебный", 0)

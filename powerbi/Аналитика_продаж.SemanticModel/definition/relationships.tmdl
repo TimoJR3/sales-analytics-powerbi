@@ -1,0 +1,20 @@
+relationship 3cecc072-0f4a-47a8-9873-da5f110d9d40
+	fromColumn: 'Продажи'.'Дата заказа'
+	toColumn: 'Календарь'.'Date'
+
+relationship 2907ea2a-e0c6-454c-82c4-3ed24eb25409
+	fromColumn: 'Продажи'.'Продукт'
+	toColumn: 'СПР_продукты'.'Продукт'
+
+relationship 538af2a4-7fa3-4859-a5a8-69b8d7b8b4ce
+	fromColumn: 'Продажи'.'Покупатель'
+	toColumn: 'СПР_покупатели'.'Покупатель'
+
+relationship a7e2a179-17dd-4ab0-a491-eb0902727953
+	fromColumn: 'Продажи'.'Регион'
+	toColumn: 'СПР_Менеджеры'.'Регион'
+
+relationship 1ffa44cc-acf8-4465-b73e-474a8a451589
+	fromColumn: 'Продажи'.'Метод доставки'
+	toColumn: 'СПР_стоимость_доставки'.'Метод доставки'
+

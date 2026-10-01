@@ -1,0 +1,8 @@
+.pbi/localSettings.json
+.pbi/cache.abf
+**/.pbi/localSettings.json
+**/.pbi/cache.abf
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+*.pbix

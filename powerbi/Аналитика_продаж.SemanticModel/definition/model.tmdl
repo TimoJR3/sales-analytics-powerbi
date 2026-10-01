@@ -1,0 +1,23 @@
+model Model
+	culture: ru-RU
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: ru-RU
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_QueryOrder = ["Источник_Excel","СПР_даты","Продажи","СПР_продукты","СПР_покупатели","СПР_Менеджеры","СПР_стоимость_доставки"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table 'Продажи'
+ref table 'СПР_продукты'
+ref table 'СПР_покупатели'
+ref table 'СПР_Менеджеры'
+ref table 'СПР_стоимость_доставки'
+ref table 'Календарь'
+ref table '_Меры'
+
+ref cultureInfo ru-RU

@@ -1,0 +1,113 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 902.87225252881728,
+            "y": 284.04216950960137
+          },
+          "nodeIndex": "_Меры",
+          "nodeLineageTag": "286852d5-4c20-44f7-84cb-02e43cf183e3",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 668.83009826029559,
+            "y": 438.56422976310887
+          },
+          "nodeIndex": "Календарь",
+          "nodeLineageTag": "d7f3a734-a2af-4e0b-ab6b-e559b8379327",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 384.66095863683921,
+            "y": 167.87810640673734
+          },
+          "nodeIndex": "Продажи",
+          "nodeLineageTag": "1ba0e0e2-8aee-4175-a7ce-f5d8744bdfa2",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 668.87225252881717,
+            "y": 98.302079967591226
+          },
+          "nodeIndex": "СПР_Менеджеры",
+          "nodeLineageTag": "2c6954fb-1f03-4782-9dfd-826ad3088ab9",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 384.61486851209224,
+            "y": -50
+          },
+          "nodeIndex": "СПР_покупатели",
+          "nodeLineageTag": "eacbb3c5-d9c8-4350-b560-79523383214a",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 231.67009382365177,
+            "y": 518.08433901920273
+          },
+          "nodeIndex": "СПР_продукты",
+          "nodeLineageTag": "28ad2fae-3433-4b4d-8b18-9a1be475eaa8",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 50,
+            "y": 339.85113927569131
+          },
+          "nodeIndex": "СПР_стоимость_доставки",
+          "nodeLineageTag": "6343281a-b3e9-45ba-b2ba-2c005a3a9e70",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "Все таблицы",
+      "zoomValue": 100,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "Все таблицы",
+  "defaultDiagram": "Все таблицы"
+}

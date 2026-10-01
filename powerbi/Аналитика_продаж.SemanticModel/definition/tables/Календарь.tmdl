@@ -1,0 +1,93 @@
+table 'Календарь'
+	lineageTag: 9b9298c6-9a7e-4835-bbc4-a078463c90e9
+	dataCategory: Time
+
+	column 'Date'
+		dataType: dateTime
+		formatString: dd.MM.yyyy
+		isKey
+		lineageTag: d91c327a-71c3-488c-a404-d00d3ede046a
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Date]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Год'
+		dataType: int64
+		formatString: 0
+		lineageTag: 10b95e76-f786-40f1-9444-e704284ee02e
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Год]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Номер месяца'
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: d5459c6d-edaf-4fd8-a87f-81fb3482fa9b
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Номер месяца]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Месяц'
+		dataType: string
+		lineageTag: 50e6e142-2c01-4716-96dd-ed530b78929f
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Месяц]
+		sortByColumn: 'Номер месяца'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Квартал'
+		dataType: string
+		lineageTag: fc3e53f6-50b1-4818-9d28-4f8d59f407f3
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Квартал]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Неделя'
+		dataType: int64
+		formatString: 0
+		lineageTag: f48fa3f5-bc16-4a0e-a102-9cb3f63cc6f8
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Неделя]
+
+		annotation SummarizationSetBy = Automatic
+
+	hierarchy 'Дата'
+		lineageTag: 5556923f-e387-488a-abb4-5dd892e5244c
+
+		level 'Год'
+			lineageTag: 348c4f30-49e0-465a-bd5c-0241c6399e76
+			column: 'Год'
+
+		level 'Квартал'
+			lineageTag: c24c8d9d-37cd-4096-a243-0cf08758ef37
+			column: 'Квартал'
+
+		level 'Месяц'
+			lineageTag: 5757ad3d-d240-4545-924a-69121fff95a0
+			column: 'Месяц'
+
+	partition 'Календарь' = calculated
+		mode: import
+		source =
+				ADDCOLUMNS(
+				    CALENDAR(DATE(2022, 1, 1), DATE(2022, 12, 31)),
+				    "Год", YEAR([Date]),
+				    "Номер месяца", MONTH([Date]),
+				    "Месяц", SWITCH(MONTH([Date]), 1, "Январь", 2, "Февраль", 3, "Март", 4, "Апрель", 5, "Май", 6, "Июнь", 7, "Июль", 8, "Август", 9, "Сентябрь", 10, "Октябрь", 11, "Ноябрь", "Декабрь"),
+				    "Квартал", "Кв. " & QUARTER([Date]),
+				    "Неделя", WEEKNUM([Date], 2)
+				)
+
+	annotation PBI_Id = d1bd45ce0119441db998255aab207c38

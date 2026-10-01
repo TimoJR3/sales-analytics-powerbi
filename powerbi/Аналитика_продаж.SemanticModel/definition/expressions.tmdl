@@ -1,0 +1,29 @@
+expression ПутьКФайлуДанных = "C:\sales-analytics-powerbi\data\source.xlsx" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: b5bcb618-902a-436b-940a-29e2dd261621
+
+	annotation PBI_ResultType = Text
+
+expression 'Источник_Excel' =
+		let
+		    Источник = Excel.Workbook(File.Contents(ПутьКФайлуДанных), true, true)
+		in
+		    Источник
+	lineageTag: 097972f1-9d12-47b1-8282-a754c952959d
+
+	annotation PBI_ResultType = Table
+
+expression 'СПР_даты' =
+		let
+		    ЧислоИз = (x) => if x = null then null else if Value.Is(x, type number) then x else Number.From(Text.Remove(Text.From(x), {" ", "#(00A0)", "#(202F)"}), "en-US"),
+		    ТекстИз = (x) => if x = null then null else Text.Trim(Text.From(x)),
+		    Лист = #"Источник_Excel"{[Item="СПР_даты_заказа",Kind="Sheet"]}[Data],
+		    Выбор = Table.SelectColumns(Лист, {"Order_ID", "Дата"}),
+		    Типы = Table.TransformColumns(Выбор, {{"Order_ID", each Int64.From(ЧислоИз(_)), Int64.Type}, {"Дата", each try Date.From(_) otherwise null, type date}}),
+		    Пустые = Table.SelectRows(Типы, each [Order_ID] <> null and [Дата] <> null),
+		    Уник = Table.Distinct(Пустые, {"Order_ID"})
+		in
+		    Уник
+	lineageTag: 56aa2aa5-c627-447e-8bfc-db071b79d941
+
+	annotation PBI_ResultType = Table
+

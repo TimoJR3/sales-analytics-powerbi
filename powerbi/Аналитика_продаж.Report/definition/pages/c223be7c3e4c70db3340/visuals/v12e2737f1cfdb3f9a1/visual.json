@@ -1,0 +1,135 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.8.0/schema.json",
+  "name": "v12e2737f1cfdb3f9a1",
+  "position": {
+    "x": 430,
+    "y": 297,
+    "z": 11000,
+    "height": 413,
+    "width": 400,
+    "tabOrder": 11000
+  },
+  "visual": {
+    "visualType": "clusteredBarChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "СПР_продукты"
+                    }
+                  },
+                  "Property": "Категория продукта"
+                }
+              },
+              "queryRef": "СПР_продукты.Категория продукта",
+              "nativeQueryRef": "Категория продукта"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "СПР_продукты"
+                    }
+                  },
+                  "Property": "Подкатегория продукта"
+                }
+              },
+              "queryRef": "СПР_продукты.Подкатегория продукта",
+              "nativeQueryRef": "Подкатегория продукта"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "СПР_продукты"
+                    }
+                  },
+                  "Property": "Продукт"
+                }
+              },
+              "queryRef": "СПР_продукты.Продукт",
+              "nativeQueryRef": "Продукт"
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Меры"
+                    }
+                  },
+                  "Property": "Рентабельность, %"
+                }
+              },
+              "queryRef": "_Меры.Рентабельность, %",
+              "nativeQueryRef": "Рентабельность, %"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "labels": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true,
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'по номенклатуре'"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

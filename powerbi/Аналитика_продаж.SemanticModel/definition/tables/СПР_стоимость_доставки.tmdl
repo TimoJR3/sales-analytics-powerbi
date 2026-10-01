@@ -1,0 +1,35 @@
+table 'СПР_стоимость_доставки'
+	lineageTag: 1fd81a19-dc55-48f9-9499-9ffb1e5f516c
+
+	column 'Метод доставки'
+		dataType: string
+		lineageTag: 8f285f6b-9e99-468f-8585-c8acfd2b0a1e
+		summarizeBy: none
+		sourceColumn: Метод доставки
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Стоимость доставки'
+		dataType: double
+		formatString: #,0
+		lineageTag: bab2c80a-7b62-4a64-b542-33d3ddb959b8
+		summarizeBy: none
+		sourceColumn: Стоимость доставки
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'СПР_стоимость_доставки' = m
+		mode: import
+		source =
+				let
+				    ЧислоИз = (x) => if x = null then null else if Value.Is(x, type number) then x else Number.From(Text.Remove(Text.From(x), {" ", "#(00A0)", "#(202F)"}), "en-US"),
+				    ТекстИз = (x) => if x = null then null else Text.Trim(Text.From(x)),
+				    Лист = #"Источник_Excel"{[Item="СПР_стоимость_доставки",Kind="Sheet"]}[Data],
+				    Выбор = Table.SelectColumns(Лист, {"Метод доставки", "Стоимость доставки"}),
+				    Типы = Table.TransformColumns(Выбор, {{"Метод доставки", ТекстИз, type text}, {"Стоимость доставки", ЧислоИз, type number}}),
+				    Пустые = Table.SelectRows(Типы, each [Метод доставки] <> null and [Метод доставки] <> ""),
+				    Уник = Table.Distinct(Пустые, {"Метод доставки", Comparer.OrdinalIgnoreCase})
+				in
+				    Уник
+
+	annotation PBI_ResultType = Table

@@ -1,0 +1,106 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.8.0/schema.json",
+  "name": "v134674da1ca1f4fe67",
+  "position": {
+    "x": 840,
+    "y": 157,
+    "z": 12000,
+    "height": 250,
+    "width": 420,
+    "tabOrder": 12000
+  },
+  "visual": {
+    "visualType": "filledMap",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "СПР_Менеджеры"
+                    }
+                  },
+                  "Property": "Регион"
+                }
+              },
+              "queryRef": "СПР_Менеджеры.Регион",
+              "nativeQueryRef": "Регион"
+            }
+          ]
+        },
+        "Tooltips": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Меры"
+                    }
+                  },
+                  "Property": "Выручка"
+                }
+              },
+              "queryRef": "_Меры.Выручка",
+              "nativeQueryRef": "Выручка"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Меры"
+                    }
+                  },
+                  "Property": "Прибыль"
+                }
+              },
+              "queryRef": "_Меры.Прибыль",
+              "nativeQueryRef": "Прибыль"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true,
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'распределение на карте'"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

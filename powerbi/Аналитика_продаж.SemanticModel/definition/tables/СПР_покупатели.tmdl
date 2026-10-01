@@ -1,0 +1,34 @@
+table 'СПР_покупатели'
+	lineageTag: f56c12bc-d381-4316-899b-a09403ad073f
+
+	column 'Покупатель'
+		dataType: string
+		lineageTag: f9d28820-df85-40ea-a88f-087d94cd7d19
+		summarizeBy: none
+		sourceColumn: Покупатель
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Сегмент покупателя'
+		dataType: string
+		lineageTag: ff887399-a7d2-4aa1-bc24-372e2c32791b
+		summarizeBy: none
+		sourceColumn: Сегмент покупателя
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'СПР_покупатели' = m
+		mode: import
+		source =
+				let
+				    ЧислоИз = (x) => if x = null then null else if Value.Is(x, type number) then x else Number.From(Text.Remove(Text.From(x), {" ", "#(00A0)", "#(202F)"}), "en-US"),
+				    ТекстИз = (x) => if x = null then null else Text.Trim(Text.From(x)),
+				    Лист = #"Источник_Excel"{[Item="СПР_покупатели",Kind="Sheet"]}[Data],
+				    Выбор = Table.SelectColumns(Лист, {"Покупатель", "Сегмент покупателя"}),
+				    Типы = Table.TransformColumns(Выбор, {{"Покупатель", ТекстИз, type text}, {"Сегмент покупателя", ТекстИз, type text}}),
+				    Пустые = Table.SelectRows(Типы, each [Покупатель] <> null and [Покупатель] <> ""),
+				    Уник = Table.Distinct(Пустые, {"Покупатель", Comparer.OrdinalIgnoreCase})
+				in
+				    Уник
+
+	annotation PBI_ResultType = Table

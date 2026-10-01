@@ -1,0 +1,93 @@
+table 'СПР_продукты'
+	lineageTag: 5c465e44-1244-4a1b-84ee-4bb2d23dad29
+
+	column 'Категория продукта'
+		dataType: string
+		lineageTag: 71f65945-1bbb-4c99-993a-610181a3e7f3
+		summarizeBy: none
+		sourceColumn: Категория продукта
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Подкатегория продукта'
+		dataType: string
+		lineageTag: 2e7ee607-952b-46ec-bc54-0f9f9905b712
+		summarizeBy: none
+		sourceColumn: Подкатегория продукта
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Продукт'
+		dataType: string
+		lineageTag: 911d6cf5-2416-4453-b1cc-2379a6942c9d
+		summarizeBy: none
+		sourceColumn: Продукт
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Выручка товара' = CALCULATE(SUM('Продажи'[Выручка]))
+		dataType: double
+		formatString: #,0.00
+		lineageTag: a8304c79-0fb2-4eb9-9c8a-58f89c95d9d5
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Накопленная доля' =
+			VAR cur = 'СПР_продукты'[Выручка товара]
+			VAR tot = SUM('СПР_продукты'[Выручка товара])
+			RETURN
+			    DIVIDE(
+			        SUMX(FILTER('СПР_продукты', 'СПР_продукты'[Выручка товара] >= cur), 'СПР_продукты'[Выручка товара]),
+			        tot
+			    )
+		dataType: double
+		formatString: 0.00%
+		lineageTag: 7d76be2e-d75f-49b9-8d6b-0126f4aa2666
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'ABC' =
+			SWITCH(
+			    TRUE(),
+			    'СПР_продукты'[Накопленная доля] <= 0.7, "A",
+			    'СПР_продукты'[Накопленная доля] <= 0.9, "B",
+			    "C"
+			)
+		dataType: string
+		lineageTag: 3c27bf9c-540a-4fc4-b76a-f7b4016c4b3f
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	hierarchy 'Номенклатура'
+		lineageTag: eb8db621-e838-4235-8a25-aa687f96ad71
+
+		level 'Категория продукта'
+			lineageTag: eb18152f-361f-4913-93ad-596b339285f1
+			column: 'Категория продукта'
+
+		level 'Подкатегория продукта'
+			lineageTag: c015f421-867e-40e6-a739-0104c2ef3cc0
+			column: 'Подкатегория продукта'
+
+		level 'Продукт'
+			lineageTag: 588cdf85-3749-49ae-85cc-b88d7ce13c31
+			column: 'Продукт'
+
+	partition 'СПР_продукты' = m
+		mode: import
+		source =
+				let
+				    ЧислоИз = (x) => if x = null then null else if Value.Is(x, type number) then x else Number.From(Text.Remove(Text.From(x), {" ", "#(00A0)", "#(202F)"}), "en-US"),
+				    ТекстИз = (x) => if x = null then null else Text.Trim(Text.From(x)),
+				    Лист = #"Источник_Excel"{[Item="СПР_продукты",Kind="Sheet"]}[Data],
+				    Выбор = Table.SelectColumns(Лист, {"Категория продукта", "Подкатегория продукта", "Продукт"}),
+				    Типы = Table.TransformColumns(Выбор, {{"Категория продукта", ТекстИз, type text}, {"Подкатегория продукта", ТекстИз, type text}, {"Продукт", ТекстИз, type text}}),
+				    Пустые = Table.SelectRows(Типы, each [Продукт] <> null and [Продукт] <> ""),
+				    Уник = Table.Distinct(Пустые, {"Продукт", Comparer.OrdinalIgnoreCase})
+				in
+				    Уник
+
+	annotation PBI_ResultType = Table
